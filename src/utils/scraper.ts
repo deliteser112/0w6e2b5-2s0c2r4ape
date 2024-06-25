@@ -8,7 +8,10 @@ const scrape = async (queryParams: QueryParams) => {
   console.log('<-------- Scraping is started --------->');
 
   //Lanuch browser and target page.
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
   await page.goto(SCRAPING_URL, { waitUntil: 'networkidle2' });
 
