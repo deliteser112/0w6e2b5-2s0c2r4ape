@@ -1,5 +1,7 @@
-const puppeteer = require('puppeteer');
-const { SCRAPING_URL, UISelectors } = require('../enums');
+// const puppeteer = require('puppeteer');
+// const { SCRAPING_URL, UISelectors } = require('../enums');
+import puppeteer from 'puppeteer';
+import { SCRAPING_URL, UISelectors } from '../enums';
 import { QueryParams } from "src/types/params";
 
 const scrape = async (queryParams: QueryParams) => {
@@ -105,7 +107,7 @@ const scrape = async (queryParams: QueryParams) => {
       }, UISelectors.PAGE_ITEM_CONTENT_SELECTOR)
 
       console.log('Number of pages and total items is ', itemAndPage);
-      pageNumber = itemAndPage.pages;
+      pageNumber = parseInt(itemAndPage.pages);
     }
     
   }
