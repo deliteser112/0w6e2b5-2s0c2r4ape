@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 permissions:
@@ -33,4 +33,27 @@ jobs:
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
-      - run: npx nx affected -t lint test build
+      - run: npx nx affected --target=lint
+      - run: npx nx affected --target=test
+      - run: npx nx affected --target=build
+
+# Deploy to EC2
+      - name: Deploy to EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+          TARGET_DIR: ${{ secrets.TARGET_DIR }}
+        run: |
+          # Install SSH client
+          sudo apt-get update
+          sudo apt-get install -y openssh-client
+          # Start SSH agent
+          eval "$(ssh-agent -s)"
+          # Add SSH key
+          ssh-add - <<< "${SSH_PRIVATE_KEY}"
+          # Disable SSH host key checking
+          mkdir -p ~/.ssh
+          echo "StrictHostKeyChecking no" > ~/.ssh/config
+          # Sync build files to EC2
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/ $USER@$HOST:$TARGET_DIR
