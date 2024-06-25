@@ -56,4 +56,4 @@ jobs:
           mkdir -p ~/.ssh
           echo "StrictHostKeyChecking no" > ~/.ssh/config
           # Sync build files to EC2
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/ $USER@$HOST:$TARGET_DIR
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" dist/assessment $USER@$HOST:$TARGET_DIR
