@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 import { SCRAPING_URL, UISelectors } from '../enums';
-import { QueryParams } from "src/types/params";
+import { QueryParams } from "../types/params";
 import logger from './logger';
 
 const scrape = async (queryParams: QueryParams) => {

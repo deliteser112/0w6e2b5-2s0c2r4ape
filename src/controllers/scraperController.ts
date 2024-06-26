@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import scraperService from '../services/scraperService';
 import { QueryParams } from '../types/params';
-import { DataOfScraping } from 'src/types/scraping';
+import { DataOfScraping } from '../types/scraping';
 import logger from '../utils/logger';
 import { isEmptyQueryParams } from '../utils/validation';
 

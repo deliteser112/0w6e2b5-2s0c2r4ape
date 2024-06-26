@@ -1,5 +1,5 @@
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import { DataOfScraping } from 'src/types/scraping';
+import { DataOfScraping } from '../types/scraping';
 import config from '../config';
 
 const s3Client = new S3Client({
