@@ -4,6 +4,8 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
+  deploymentBucket:
+    name: serverless-bucket-illumination
 
 functions:
   triggerScrapeLambda:
