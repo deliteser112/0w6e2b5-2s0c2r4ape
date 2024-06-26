@@ -9,7 +9,7 @@ provider:
 
 functions:
   triggerScrapeLambda:
-    handler: main.js
+    handler: cron-job-lambda/src/main.js
     events:
       - schedule:
           rate: cron(0 0 * * ? *)  # Runs daily at midnight UTC
