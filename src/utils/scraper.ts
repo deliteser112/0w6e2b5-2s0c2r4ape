@@ -7,18 +7,19 @@ const scrape = async (queryParams: QueryParams) => {
   logger('<-------- Scraping is started --------->');
 
   //Lanuch browser and target page.
+  //args is for only Linux. Work fine without args on Windows
   const browser = await puppeteer.launch({
     headless: true,
-    // args: [
-    //   '--no-sandbox',
-    //   '--disable-setuid-sandbox',
-    //   '--disable-dev-shm-usage',
-    //   '--disable-accelerated-2d-canvas',
-    //   '--no-first-run',
-    //   '--no-zygote',
-    //   '--single-process',
-    //   '--disable-gpu'
-    // ]
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--no-first-run',
+      '--no-zygote',
+      '--single-process',
+      '--disable-gpu'
+    ]
 });
   const page = await browser.newPage();
   await page.goto(SCRAPING_URL, { waitUntil: 'networkidle2' });
@@ -153,7 +154,6 @@ const scrape = async (queryParams: QueryParams) => {
     const isNextButtonVisible = await page.waitForSelector(UISelectors.NEXT_BUTTON_SELECTOR, { timeout: 500, visible: true })
       .then(() => true)
       .catch(() => false);
-      logger('isnextButtonVisable', isNextButtonVisible)
 
     if (isNextButtonVisible && pageNumber > 1) {
       await page.click(UISelectors.NEXT_BUTTON_SELECTOR);
