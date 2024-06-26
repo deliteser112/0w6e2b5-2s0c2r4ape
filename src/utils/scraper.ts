@@ -1,11 +1,10 @@
-// const puppeteer = require('puppeteer');
-// const { SCRAPING_URL, UISelectors } = require('../enums');
 import puppeteer from 'puppeteer';
 import { SCRAPING_URL, UISelectors } from '../enums';
 import { QueryParams } from "src/types/params";
+import logger from './logger';
 
 const scrape = async (queryParams: QueryParams) => {
-  console.log('<-------- Scraping is started --------->');
+  logger('<-------- Scraping is started --------->');
 
   //Lanuch browser and target page.
   const browser = await puppeteer.launch({
@@ -24,25 +23,26 @@ const scrape = async (queryParams: QueryParams) => {
   const page = await browser.newPage();
   await page.goto(SCRAPING_URL, { waitUntil: 'networkidle2' });
 
-  const waitingLoadingTable = async () => {
+  const waitingLoadingTable = async (info: string) => {
     const loadingSelector = UISelectors.LOADING_CONTENT_SELECTOR;
 
     // Wait for the loading indicator to become visible.
-    console.log('Wait for the loading indicator to become visible =====>');
+    logger(info);
+    logger('Wait for the loading indicator to become visible =====>');
     await page.waitForFunction((selector: string) => {
       const element = document.querySelector(selector);
       return element && window.getComputedStyle(element).display !== 'none';
     }, {}, loadingSelector);
 
     // Wait for the loading indicator to disappear.
-    console.log('Wait for the loading indicator to disappear =====>');
+    logger('Wait for the loading indicator to disappear =====>');
     await page.waitForFunction((selector: string) => {
       const element = document.querySelector(selector);
       return !element || window.getComputedStyle(element).display === 'none';
     }, {}, loadingSelector);
   }
 
-  console.log('Browser and page are launched =====>');
+  logger('Browser and page are launched =====>');
   // Fill in the form using queryParams.
   if (queryParams.lastName) {
     await page.type(UISelectors.LASTNAME_SELECTOR, queryParams.lastName);
@@ -99,7 +99,7 @@ const scrape = async (queryParams: QueryParams) => {
     await page.waitForSelector(UISelectors.PAGE_SIZE_50_CONTENT_SELECTOR);
     await page.click(UISelectors.PAGE_SIZE_50_CONTENT_SELECTOR);
 
-    await waitingLoadingTable();
+    await waitingLoadingTable('Waiting for resize of number of items in table');
 
     const isChangeButtonVisible = await page.waitForSelector(UISelectors.CHANGE_PAGE_SIZE_BUTTON, { timeout: 500, visible: true })
       .then(() => true)
@@ -107,7 +107,7 @@ const scrape = async (queryParams: QueryParams) => {
 
     if (isChangeButtonVisible) {
       //Get number of pages and total items
-      console.log('Get number of pages and total items =====>');
+      logger('Get number of pages and total items =====>');
       const itemAndPage = await page.evaluate((selector: string) => {
         const infoDiv = document.querySelector(selector);
         const itemsText = infoDiv.querySelectorAll('strong')[0].innerText;
@@ -118,15 +118,15 @@ const scrape = async (queryParams: QueryParams) => {
         };
       }, UISelectors.PAGE_ITEM_CONTENT_SELECTOR)
 
-      console.log('Number of pages and total items is ', itemAndPage);
+      logger('Number of pages and total items is ', itemAndPage);
       pageNumber = parseInt(itemAndPage.pages);
     }
     
   }
   
-  console.log('Handling pagenation and scraping are stared =====>');
+  logger('Handling pagenation and scraping are stared =====>');
   do {
-    console.log('Page number is ', pageNumber);
+    logger('Page number is ', pageNumber);
     //Scraping data from table.
     const data = await page.evaluate((selector: string) => {
       const rows = document.querySelectorAll(selector);
@@ -146,27 +146,28 @@ const scrape = async (queryParams: QueryParams) => {
     }, `${UISelectors.TABLE_CONTENT_SELECTOR} tr`);
 
     results.push(...data);
-    console.log('Size of data is ', data.length)
-    console.log('Data of on current page is ', data);
+    logger('Size of data is ', data.length)
+    logger('Data of on current page is ', data);
 
     //Click Next page button.
     const isNextButtonVisible = await page.waitForSelector(UISelectors.NEXT_BUTTON_SELECTOR, { timeout: 500, visible: true })
       .then(() => true)
       .catch(() => false);
-    console.log('isnextButtonVisable', isNextButtonVisible)
+      logger('isnextButtonVisable', isNextButtonVisible)
 
     if (isNextButtonVisible && pageNumber > 1) {
       await page.click(UISelectors.NEXT_BUTTON_SELECTOR);
-      await waitingLoadingTable();
+      await waitingLoadingTable(`Waiting for loading ${pageNumber} page`);
     }
 
     pageNumber --;
   } while (pageNumber > 0);
 
   await browser.close();
-  console.log('Browser and page are closed =====>');
+  logger('Browser and page are closed =====>');
 
-  console.log('Final result is ', results);
+  logger('Final result is ', results);
+  logger('<-------- Scraping is ended --------->');
   return results;
 };
 

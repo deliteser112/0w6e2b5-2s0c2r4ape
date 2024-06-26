@@ -1,8 +1,9 @@
-// require('dotenv').config();
 import dEnv from 'dotenv';
 
 dEnv.config();
-module.exports = {
+export default {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
+  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  awsSecretKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
