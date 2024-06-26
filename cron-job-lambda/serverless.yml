@@ -1,4 +1,4 @@
-service: my-lambda-service
+service: cron-job-lambda
 
 provider:
   name: aws
