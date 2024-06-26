@@ -10,6 +10,7 @@ const cloudWatchConfig = {
   awsSecretKey: config.awsSecretKey,
 };
 
+console.log('cloudWatchConfig', cloudWatchConfig);
 const { format } = winston;
 
 const customFormat = format.printf(({ level, message, timestamp, ...metadata }) => {
