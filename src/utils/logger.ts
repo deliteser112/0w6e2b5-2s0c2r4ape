@@ -32,7 +32,7 @@ const winstonLogger = winston.createLogger({
   ]
 });
 
-const logger = (info: string, metaData?: Object) => {
+const logger = (info: string, metaData?: unknown) => {
   console.log(info, metaData ?? '');
   winstonLogger.info(info, metaData ?? '');
 }
