@@ -70,9 +70,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      # Build cron-job-lambda project
+      - name: Build the cron-job-lambda project
+        run: nx build cron-job-lambda
+
+      - name: Prepare deployment directory
+        run: |
+          cp cron-job-lambda/serverless.yml dist/cron-job-lambda/
+          cd dist/cron-job-lambda
+          npm install --only=prod
+
       # Deploy Lambda function with Serverless
-      - name: Deploy Lambda
-        run: serverless deploy --config cron-job-lambda/serverless.yml
+      - name: Deploy cron-job-lambda
+        run: serverless deploy --config serverless.yml
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}  
 
