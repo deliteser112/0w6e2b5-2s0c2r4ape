@@ -82,7 +82,9 @@ jobs:
 
       # Deploy Lambda function with Serverless
       - name: Deploy cron-job-lambda
-        run: serverless deploy
+        run: |
+        cd dist/cron-job-lambda
+        serverless deploy --config serverless.yml
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}  
 
