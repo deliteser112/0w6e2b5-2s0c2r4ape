@@ -72,7 +72,7 @@ jobs:
 
       # Build cron-job-lambda project
       - name: Build the cron-job-lambda project
-        run: nx build cron-job-lambda
+        run: npx nx affected --target=build cron-job-lambda
 
       - name: Prepare deployment directory
         run: |
