@@ -12,5 +12,3 @@ functions:
       - schedule:
           rate: cron(0 0 * * ? *)  # Runs daily at midnight UTC
           enabled: true
-plugins:
-  - serverless-offline
