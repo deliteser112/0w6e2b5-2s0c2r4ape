@@ -10,24 +10,7 @@ const cloudWatchConfig = {
   awsSecretKey: config.awsSecretKey,
 };
 
-console.log('cloudWatchConfig', cloudWatchConfig);
-const { format } = winston;
-
-const customFormat = format.printf(({ level, message, timestamp, ...metadata }) => {
-  let msg = `${timestamp} [${level}] : ${message} `;
-  if (Object.keys(metadata).length !== 0) {
-    msg += JSON.stringify(metadata);
-  }
-  return msg;
-});
-
 const winstonLogger = winston.createLogger({
-  level: 'info',
-  format: format.combine(
-    format.timestamp(),
-    format.errors({ stack: true }),
-    customFormat
-  ),
   transports: [
     new WinstonCloudWatch(cloudWatchConfig)
   ]
@@ -35,7 +18,9 @@ const winstonLogger = winston.createLogger({
 
 const logger = (info: string, metaData?: unknown) => {
   console.log(info, metaData ?? '');
-  winstonLogger.info(info, metaData ?? '');
+
+  const msg = info + JSON.stringify({ metaData });
+  winstonLogger.info(msg);
 }
 
 export default logger;
