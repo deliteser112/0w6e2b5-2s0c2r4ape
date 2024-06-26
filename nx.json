@@ -34,7 +34,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["e2e/**/*"]
+      "exclude": ["e2e/**/*", "cron-job-lambda-e2e/**/*"]
     }
   ],
   "nxCloudAccessToken": "NmIyODJjZWQtZjRjYi00YjQxLWI4YTMtNjQyNGFkYjUyNWZjfHJlYWQtd3JpdGU="

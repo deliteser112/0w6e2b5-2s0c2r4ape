@@ -37,7 +37,7 @@ jobs:
       # - run: npx nx affected --target=test
       - run: npx nx affected --target=build
 
-# Deploy to EC2
+      # Deploy to EC2
       - name: Deploy to EC2
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -57,3 +57,20 @@ jobs:
           echo "StrictHostKeyChecking no" > ~/.ssh/config
           # Sync build files to EC2
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" dist/assessment $USER@$HOST:$TARGET_DIR
+
+      # Install Serverless Framework
+      - name: Install Serverless
+        run: npm install -g serverless
+
+      # Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Deploy Lambda function with Serverless
+      - name: Deploy Lambda
+        run: serverless deploy --config cron-job-lambda/serverless.yml
+
