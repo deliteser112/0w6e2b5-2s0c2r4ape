@@ -58,6 +58,20 @@ jobs:
           # Sync build files to EC2
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" dist/assessment $USER@$HOST:$TARGET_DIR
 
+      # New step to restart systemd service
+      - name: Restart Systemd Service
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+        run: |
+          sudo apt-get install -y openssh-client
+          eval "$(ssh-agent -s)"
+          ssh-add - <<< "${SSH_PRIVATE_KEY}"
+          mkdir -p ~/.ssh
+          echo "StrictHostKeyChecking no" > ~/.ssh/config
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "sudo systemctl daemon-reload && sudo systemctl restart /etc/systemd/system/scraping.service"
+
       # Install Serverless Framework
       - name: Install Serverless
         run: npm install -g serverless
