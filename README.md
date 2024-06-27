@@ -1,4 +1,4 @@
-![image](https://github.com/deliteser112/0w6e2b5-2s0c2r4ape/assets/158203489/d3458327-1e3b-4539-aacb-4f6a2776cc0a)# Scraping Backend Project
+# Scraping Backend Project
 
 ## Project Overview
 
@@ -20,16 +20,48 @@ The entire project is deployed using GitHub Actions, ensuring automated and cont
 The main backend service provides an endpoint to trigger the scraping process. It can perform two types of operations:
 - On-Demand Scraping: Triggered by a user request with specific query parameters.
 - Cached Data Retrieval: When no query parameters are provided, the service retrieves previously scraped data from S3.
-Key Features:
 
+Key Features:
 - Scraping Logic: Handles pagination and optimizes scraping time to ensure efficient data retrieval.
 - Data Caching: Stores the scraped data in S3 to avoid redundant scraping and reduce response time for subsequent requests.
 - Endpoint: Exposes a `/scrape` endpoint that can be triggered manually or by the cron job.
 
+### Cron Job Service
 
+The cron job service is designed to automatically trigger the scraping process at scheduled intervals. This ensures that the data is regularly updated without manual intervention.
+Key Features:
+- Scheduled Trigger: Configured to run daily at midnight UTC using a cron schedule.
+- Automated Data Update: Calls the scraping endpoint and processes the data, storing it in S3 for future use.
 
+## Usage
 
+### How to Trigger the Scraping Process
 
+1. Manual Trigger:
+   - Send a GET request to the `/scrape` endpoint with the desired query parameters.
+   - Example: `GET http://ec2-3-88-184-167.compute-1.amazonaws.com/scrape?lastName=Doe&firstName=John`
+3. Automated Trigger (Cron Job):
+   - The cron job automatically triggers the scraping process daily at midnight UTC.
+   - No action is required from the user for this to occur.
+
+### Endpoint Details
+`/scrape` Endpoint
+- Description: Triggers the scraping process and returns the scraped data.
+- Query Parameters (optional)
+  - `lastName`
+  - `firstName`
+  - `informalName`
+  - `registrationNumber`
+  - `registrationClass`
+  - `registrationStatus`
+  - `contactLensMentor`
+  - `practiceName`
+  - `cityOrTown`
+  - `postalCode`
+  - `languageOfService`
+  - `areaOfService`
+- Special Parameter:
+  - `isCronJob`: Set to true when triggered by the cron job to store the scraped data in S3.
 
 
 To execute tasks with Nx use the following syntax:
