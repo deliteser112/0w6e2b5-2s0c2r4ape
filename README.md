@@ -128,13 +128,20 @@ nx serve assessment
 
 ## Deploying to AWS
 
-Once you have updated the main branch, both projects are deployed automatically.
+Once you update the main branch of your repository, both the main backend service and the cron job service are automatically deployed through the configured GitHub Actions workflow.
 
 ### Manage EC2 Instance
 
-Once deployed on EC2, you should do config somethings to run project successfully on cloud.
-1. Connect to EC2 instance via SSH tennal.
-2. Prepare Your EC2 Instance for Node.js
+To ensure that the main backend service runs successfully on an AWS EC2 instance, perform the following steps:
+1. Connecting to Your EC2 Instance
+   Use SSH to connect to your EC2 instance. Replace your-instance-ip with the actual IP address of your instance:
+   ```
+   ssh -i path/to/your/ssh-key.pem ec2-user@your-instance-ip
+   ```
+   
+2. Preparing Your EC2 Instance for Node.js
+   Before deploying the project, prepare your EC2 instance to run Node.js applications. This setup should be done once prior to the deployment:
+   
    ```
    curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
    sudo apt-get install -y nodejs
@@ -142,9 +149,9 @@ Once deployed on EC2, you should do config somethings to run project successfull
    mkdir ~/myproject
    cd ~/myproject
    ```
-   This should be done before deployment. You can use the new `myproject` folder as TARGET_DIR
    
-3. Go to folder where project was deployed. It is related to TARGET_DIR value of Github action secret variable.
+4. Running project
+   The project is deployed to a directory on the EC2 instance as specified by the `TARGET_DIR` environment variable in the GitHub Actions secrets. Navigate to this directory:
    - Install packages
      ```
      npm install
@@ -170,7 +177,7 @@ Once deployed on EC2, you should do config somethings to run project successfull
      node main.js
      ```
    
-4. Trigger long-running application
+5. Trigger long-running application
    - Create a service file (`/etc/systemd/system/myapp.service`)
    - Update that service file
      ```
