@@ -69,8 +69,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-        env:
-          DEPLOYMENT_BUCKET_NAME: ${{ secrets.DEPLOYMENT_BUCKET_NAME }}
 
       # Build cron-job-lambda project
       - name: Build the cron-job-lambda project
@@ -84,6 +82,8 @@ jobs:
 
       # Deploy Lambda function with Serverless
       - name: Deploy cron-job-lambda
+        env:
+          DEPLOYMENT_BUCKET_NAME: ${{ secrets.DEPLOYMENT_BUCKET_NAME }}
         run: |
           cd dist/cron-job-lambda
           serverless deploy --config serverless.yml
