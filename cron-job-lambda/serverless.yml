@@ -5,11 +5,11 @@ provider:
   runtime: nodejs18.x
   region: us-east-1
   deploymentBucket:
-    name: serverless-bucket-illumination
+    name: ${env:DEPLOYMENT_BUCKET_NAME}
 
 functions:
   triggerScrapeLambda:
-    handler: cron-job-lambda/src/main.js
+    handler: cron-job-lambda/src/main.handler
     events:
       - schedule:
           rate: cron(0 0 * * ? *)  # Runs daily at midnight UTC

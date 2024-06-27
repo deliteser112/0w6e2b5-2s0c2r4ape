@@ -1,14 +1,18 @@
 import axios from 'axios';
 
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 const handler = async (event: any) => {
   const url = 'http://3.88.184.167:3000/scrape?isCronJob=true';
 
   try {
-    const response = await axios.get(url);
-    console.log('Scrape Successful:', response.data);
+    axios.get(url);
+
+    await delay(500);
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Scrape triggered successfully', data: response.data })
+      body: JSON.stringify({ message: 'Scrape triggered successfully' })
     };
   } catch (error) {
     console.error('Error triggering scrape:', error);

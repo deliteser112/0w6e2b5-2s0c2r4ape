@@ -143,7 +143,7 @@ const scrape = async (queryParams: QueryParams) => {
       });
 
       //Filter valid data. Table contains non-valid data.
-      return data.filter((item) => item.name && item.status && item.class && item.location && item.id);
+      return data.filter((item) => item.name && (item.status || item.class || item.location || item.id));
     }, `${UISelectors.TABLE_CONTENT_SELECTOR} tr`);
 
     results.push(...data);
