@@ -24,7 +24,6 @@ const scrapeData = async (req: Request, res: Response): Promise<void> => {
       areaOfService: req.query.areaOfService as string,
     };
 
-    logger('@@@@@@ Test log @@@@@@');
     logger(`<-------- GET /scrape REQUEST is triggered ${isCronJob ? 'by cron-job ' : ''}--------->`);
     logger('Scraping Query parameter is ', queryParams);
 

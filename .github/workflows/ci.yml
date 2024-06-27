@@ -35,7 +35,7 @@ jobs:
       # - run: npx nx-cloud record -- echo Hello World
       - run: npx nx affected --target=lint
       # - run: npx nx affected --target=test
-      - run: npx nx affected --target=build assessment
+      - run: npx nx build assessment
 
       # Deploy to EC2
       - name: Deploy to EC2
@@ -72,7 +72,7 @@ jobs:
 
       # Build cron-job-lambda project
       - name: Build the cron-job-lambda project
-        run: npx nx affected --target=build cron-job-lambda
+        run: npx nx build cron-job-lambda
 
       - name: Prepare deployment directory
         run: |
