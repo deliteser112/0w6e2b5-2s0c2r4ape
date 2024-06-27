@@ -70,7 +70,7 @@ jobs:
           ssh-add - <<< "${SSH_PRIVATE_KEY}"
           mkdir -p ~/.ssh
           echo "StrictHostKeyChecking no" > ~/.ssh/config
-          ssh -o StrictHostKeyChecking=no $USER@$HOST "sudo systemctl daemon-reload && sudo systemctl restart /etc/systemd/system/scraping.service"
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "sudo systemctl daemon-reload && sudo systemctl restart scraping.service"
 
       # Install Serverless Framework
       - name: Install Serverless
